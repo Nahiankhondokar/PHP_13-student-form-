@@ -1,0 +1,42 @@
+*{
+	margin:0px;
+	padding: 0px;
+	font-family: changa;
+}
+
+
+
+.form{
+	display: table;
+	margin:50px auto;
+	background-color: #09272d;
+	width: 450px;
+}
+
+.form input{
+	background:transparent;
+	border-color: gray;
+}
+
+.form input:focus{
+	background:transparent;
+}
+
+.form-control:focus {
+    color: #495057;
+    background-color: #fff;
+    outline: 0;
+  	border-color: white;
+  	box-shadow: none;
+    
+}
+
+
+.form select{
+	background:transparent;
+	border-color: gray;
+}
+
+.form select:focus{
+	background:transparent;
+}
