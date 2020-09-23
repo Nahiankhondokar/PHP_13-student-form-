@@ -1,3 +1,5 @@
+<?php include_once "app/autoload.php"; ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -28,13 +30,23 @@
 		$uname = $_POST['uname'];
 		$age = $_POST['age'];
 
-		if( isset($gender = $_POST['gender'];)) {
+		// gender isseting
+
+		if( isset($_POST['gender'])) {
 			$gender = $_POST['gender'];
 		}
-		
+
 		$shift = $_POST['shift'];
 		$location = $_POST['location'];
+
+
+		// File Management
 		
+		$file_name = $_FILES['photo']['name'];
+		$file_tmp_name = $_FILES['photo']['tmp_name'];
+		$file_size = $_FILES['photo']['size'];
+
+		$unique_file_name = md5( time() . rand() ) . $file_name;
 
 
 
@@ -44,10 +56,28 @@
 		 */
 
 
-
-		if ( empty($name) || empty($email) || empty($cell) || empty($uname) || empty($age) || empty($gender) || empty($shift) || empty($location) || empty($photo) ) {
+		if ( empty($name) || empty($email) || empty($cell) || empty($uname) || empty($age) || empty($gender) || empty($shift) || empty($location) ) {
 			
-			$mess = "<p>All feilds are required !</p>";
+			$mess = validationMsg('All feilds are required ');
+
+		}elseif( filter_var($email, FILTER_VALIDATE_EMAIL) == false){
+
+			$mess = validationMsg('Invalid Email Address ');
+
+		}elseif( $age <= 5 || $age >= 12){
+
+			$mess = validationMsg('Your age is not allow for this institute ', 'warning', 'warning');
+
+		}else{
+
+			$sql = "INSERT INTO students (name, email, cell, uname, age, gender, shift, location, photo) VALUES ('$name','$email','$cell','$uname','$age','$gender','$shift','$location', '$unique_file_name')";
+
+			$connection -> query($sql);
+
+			move_uploaded_file($file_tmp_name, 'photo/students/' . $unique_file_name);
+
+			$mess = validationMsg('Registration Completed ', 'success', 'success');
+
 		}
 
 
@@ -70,7 +100,8 @@
 
 
 
-<div>
+<div class="student_form">
+	<a href="students.php" class="btn btn-primary rounded-0">All Students</a>
 	<form class="form p-5 text-white shadow-lg" method="POST" enctype="multipart/form-data">
 		<h1 class="text-center">Add New Student </h1>
 
@@ -79,7 +110,6 @@
 		if ( isset($mess)) {
 			echo $mess;
 		}
-
 
 		 ?>
 
